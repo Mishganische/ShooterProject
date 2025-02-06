@@ -19,3 +19,23 @@ Build/
 Binaries/
 Saved/
 DerivedDataCache/
+
+# Игнорируем временные файлы
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+*.sln
+*.log
+*.obj
+*.pdb
+*.exe
+*.dll
+*.app
+*.dmg
+*.icns
+*.ipa
+*.xcodeproj
+*.xcworkspacegit add .
+             git commit -m "Первый коммит: чистый проект"
