@@ -20,20 +20,26 @@ public:
 
 	void StartFire();
 	void StopFire();
+	void NextWeapon();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	
 	UPROPERTY(EditDefaultsOnly, category = "Weapon")
 	TArray <TSubclassOf<ASTUBaseWeapon>> WeaponClasses;
 
 	UPROPERTY(EditDefaultsOnly, category = "Weapon")
-	FName WeaponEquipSocketName = "WeaponSocket";
+	FName WeaponEquipSocketName = "WeaponPoint";
 
 	UPROPERTY(EditDefaultsOnly, category = "Weapon")
 	FName WeaponArmorySocketName = "ArmorySocket";
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* EquipAnimMontage;
+	
 
 private:
 	UPROPERTY()
@@ -45,5 +51,7 @@ private:
 	int32 CurrentWeaponIndex =0;
 	
 	void SpawnWeapons();
-		
+	void AttachWeaponToSocket( ASTUBaseWeapon* Weapon, USceneComponent* SceneComponent, const FName& SocketName);
+	void EquipWeapon (int32 WeaponIndex);
+	void PlayAnimMontage(UAnimMontage* Animation);
 };
