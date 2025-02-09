@@ -4,7 +4,9 @@
 #include "Components/STUWeaponComponent.h"
 #include "Weapon/STUBaseWeapon.h"
 #include "GameFramework/Character.h"
+#include "Animations/STUEquipFinishAnimNotify.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogWeaponComponent, All, All);
 
 USTUWeaponComponent::USTUWeaponComponent()
 {
@@ -17,6 +19,7 @@ void USTUWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	CurrentWeaponIndex=0;
+	InitAnimations();
 	SpawnWeapons();
 	EquipWeapon(CurrentWeaponIndex);
 }
@@ -100,4 +103,26 @@ void USTUWeaponComponent::PlayAnimMontage(UAnimMontage* Animation)
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	if(!Character) return;
 	Character->PlayAnimMontage(Animation);
+}
+
+void USTUWeaponComponent::InitAnimations()
+{
+	if(!EquipAnimMontage) return;
+	const auto NotifyEvents = EquipAnimMontage->Notifies;
+	for (auto NotifyEvent : NotifyEvents)
+	{
+		auto EquipFinishedNotify = Cast<USTUEquipFinishAnimNotify>(NotifyEvent.Notify);
+		if(EquipFinishedNotify)
+		{
+			EquipFinishedNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnEquipFinished);
+			break;
+		}
+	}
+}
+
+void USTUWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
+{
+	ACharacter* Character = Cast<ACharacter>(GetOwner());
+	if(!Character) return;                               
+	
 }
