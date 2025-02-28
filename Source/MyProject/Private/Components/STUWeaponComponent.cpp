@@ -7,6 +7,7 @@
 #include "Animations/STUEquipFinishAnimNotify.h"
 #include "Animations/STUReloadFinishedAnimNotify.h"
 
+constexpr static int32 WeaponNum =2;
 
 USTUWeaponComponent::USTUWeaponComponent()
 {
@@ -18,6 +19,8 @@ USTUWeaponComponent::USTUWeaponComponent()
 void USTUWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	checkf(WeaponData.Num()==WeaponNum, TEXT("Our character can hold only 2 weapon items"));
 
 	CurrentWeaponIndex=0;
 	InitAnimations();
@@ -119,10 +122,15 @@ void USTUWeaponComponent::InitAnimations()
 	{
 		EquipFinishedNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnEquipFinished);
 	}
+	else
+	{
+		checkNoEntry();
+	}
+	
 	for(auto OneWeaponData:WeaponData)
 	{
 		auto ReloadFinishedNotify = FindNotifyByClass<USTUReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
-		if(!ReloadFinishedNotify) continue;
+		if(!ReloadFinishedNotify) checkNoEntry();
 
 		ReloadFinishedNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnReloadFinished);
 	}

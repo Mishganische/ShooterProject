@@ -17,6 +17,12 @@ class MYPROJECT_API ASTUHUD : public AHUD
 public:
 	virtual void DrawHUD() override;
 
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="UI")
+	TSubclassOf<UUserWidget> PlayerHUDWidgetClass;
+
+	virtual void BeginPlay() override;
+	
 private:
 	void DrawCrosshair();
 	
