@@ -6,8 +6,24 @@
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature);
 
 class USkeletalMeshComponent;
+
+USTRUCT(BlueprintType)
+struct FAmmoData
+{
+	GENERATED_BODY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	int32 Bullets;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!Infinite"))
+	int32 Clips;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	bool Infinite;
+	
+};
 
 UCLASS()
 class MYPROJECT_API ASTUBaseWeapon : public AActor
@@ -18,6 +34,11 @@ public:
 	// Sets default values for this actor's properties
 	ASTUBaseWeapon();
 
+	FOnClipEmptySignature OnClipEmpty;
+
+	void ChangeClip();
+	bool CanReload() const;
+	
 	virtual void StartFire();
 	virtual void StopFire();
 
@@ -27,6 +48,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	FAmmoData DefaultAmmo{15,30,false};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FName MuzzleSocketName = "MuzzleSocket";
@@ -46,4 +70,9 @@ protected:
 	void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd);
 
 
+	void DecreaseAmmo();
+	bool IsAmmoEmpty() const;
+	bool IsClipsEmpty() const;
+private:
+	FAmmoData CurrentAmmo;
 };

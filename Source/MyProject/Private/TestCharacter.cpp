@@ -95,9 +95,9 @@ void ATestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &ATestCharacter::OnStopRunning);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &USTUWeaponComponent::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &USTUWeaponComponent::StopFire);
-	PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &USTUWeaponComponent::NextWeapon);
+	PlayerInputComponent->BindAction("NextWeapon", IE_Released, WeaponComponent, &USTUWeaponComponent::NextWeapon);
+	PlayerInputComponent->BindAction("Reload", IE_Released, WeaponComponent, &USTUWeaponComponent::Reload);
 }
-
 
 void ATestCharacter::MoveForward(float Value)
 {
@@ -181,7 +181,6 @@ void ATestCharacter::OnGroundLanded(const FHitResult& Hit)
 	TakeDamage(FinalDamage, DamageEvent, nullptr, nullptr);
 	
 }
-
 
 
 

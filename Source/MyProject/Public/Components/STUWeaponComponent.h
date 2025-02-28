@@ -9,6 +9,18 @@
 
 class ASTUBaseWeapon;
 
+USTRUCT(BlueprintType)
+struct FWeaponData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "Weapon")
+	TSubclassOf<ASTUBaseWeapon> WeaponClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "Weapon")
+	UAnimMontage* ReloadAnimMontage;
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MYPROJECT_API USTUWeaponComponent : public UActorComponent
 {
@@ -21,6 +33,7 @@ public:
 	void StartFire();
 	void StopFire();
 	void NextWeapon();
+	void Reload();
 
 protected:
 	// Called when the game starts
@@ -29,7 +42,7 @@ protected:
 
 	
 	UPROPERTY(EditDefaultsOnly, category = "Weapon")
-	TArray <TSubclassOf<ASTUBaseWeapon>> WeaponClasses;
+	TArray<FWeaponData> WeaponData;
 
 	UPROPERTY(EditDefaultsOnly, category = "Weapon")
 	FName WeaponEquipSocketName = "WeaponPoint";
@@ -37,9 +50,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, category = "Weapon")
 	FName WeaponArmorySocketName = "ArmorySocket";
 
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UPROPERTY(EditDefaultsOnly, Category="Arimation")
 	UAnimMontage* EquipAnimMontage;
-	
 
 private:
 	UPROPERTY()
@@ -48,16 +60,42 @@ private:
 	UPROPERTY()
 	TArray <ASTUBaseWeapon*> Weapons;
 
+	UPROPERTY()
+	UAnimMontage* CurrentReloadAnimMontage = nullptr;
+
 	int32 CurrentWeaponIndex =0;
-	bool EquipAnimProgress = false;
+	bool EquipAnimInProgress = false;
+	bool ReloadAnimInProgress = false;
 	
 	void SpawnWeapons();
-	void AttachWeaponToSocket( ASTUBaseWeapon* Weapon, USceneComponent* SceneComponent, const FName& SocketName);
-	void EquipWeapon (int32 WeaponIndex);
+	void AttachWeaponToSocket(ASTUBaseWeapon* Weapon, USceneComponent* SceneComponent, const FName& SocketName);
+	void EquipWeapon(int32 WeaponIndex);
+
 	void PlayAnimMontage(UAnimMontage* Animation);
 	void InitAnimations();
 	void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
+	void OnReloadFinished(USkeletalMeshComponent* MeshComponent);
 
-	bool CanFire() const;
-	bool CanEquip() const;
+	bool CanFire();
+	bool CanEquip();
+	bool CanReload();
+
+	void OnEmptyClip();
+	void ChangeClip();
+	
+	template<typename T>
+	T*FindNotifyByClass(UAnimSequenceBase* Animation)
+	{
+		if(!Animation) return nullptr;
+		const auto NotifyEvents = Animation->Notifies;
+		for (auto NotifyEvent : NotifyEvents)
+		{
+			auto AnimNotify = Cast<T>(NotifyEvent.Notify);
+			if(AnimNotify)
+			{
+				return AnimNotify;
+			}
+		}
+		return nullptr;
+	}
 };

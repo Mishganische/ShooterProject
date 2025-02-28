@@ -28,6 +28,8 @@ void ASTUBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	check(WeaponMesh);
+
+	CurrentAmmo=DefaultAmmo;
 }
 
 
@@ -91,3 +93,47 @@ void ASTUBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, c
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
 
 }
+
+void ASTUBaseWeapon::DecreaseAmmo()
+{
+	if(CurrentAmmo.Bullets ==0) return;
+	CurrentAmmo.Bullets--;
+	if(!IsAmmoEmpty() && IsClipsEmpty())
+	{
+		StopFire();
+		OnClipEmpty.Broadcast();
+	}
+	
+}
+
+bool ASTUBaseWeapon::IsAmmoEmpty() const
+{
+	return !CurrentAmmo.Infinite && CurrentAmmo.Clips==0 && IsClipsEmpty();
+}
+
+bool ASTUBaseWeapon::IsClipsEmpty() const
+{
+	return CurrentAmmo.Bullets == 0;
+}
+
+void ASTUBaseWeapon::ChangeClip()
+{
+	if(!CurrentAmmo.Infinite)
+	{
+		if(CurrentAmmo.Clips ==0) return;
+		CurrentAmmo.Clips--;
+	}
+	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+}
+
+bool ASTUBaseWeapon::CanReload() const
+{
+	return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0;
+}
+
+
+
+
+
+
+
