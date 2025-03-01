@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Animations/STUEquipFinishAnimNotify.h"
 #include "Animations/STUReloadFinishedAnimNotify.h"
+#include "Animations/AnimUtils.h"
 
 constexpr static int32 WeaponNum =2;
 
@@ -117,7 +118,7 @@ void USTUWeaponComponent::PlayAnimMontage(UAnimMontage* Animation)
 void USTUWeaponComponent::InitAnimations()
 {
 
-	auto EquipFinishedNotify = FindNotifyByClass<USTUEquipFinishAnimNotify>(EquipAnimMontage);
+	auto EquipFinishedNotify = AnimUtils::FindNotifyByClass<USTUEquipFinishAnimNotify>(EquipAnimMontage);
 	if(EquipFinishedNotify)
 	{
 		EquipFinishedNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnEquipFinished);
@@ -129,7 +130,7 @@ void USTUWeaponComponent::InitAnimations()
 	
 	for(auto OneWeaponData:WeaponData)
 	{
-		auto ReloadFinishedNotify = FindNotifyByClass<USTUReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
+		auto ReloadFinishedNotify = AnimUtils::FindNotifyByClass<USTUReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
 		if(!ReloadFinishedNotify) checkNoEntry();
 
 		ReloadFinishedNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnReloadFinished);
@@ -169,6 +170,18 @@ bool USTUWeaponComponent::CanReload()
 void USTUWeaponComponent::Reload()
 {
 	ChangeClip();
+}
+
+bool USTUWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
+{
+	{
+		if(CurrentWeapon)
+		{
+			UIData = CurrentWeapon->GetUIData();
+			return true;
+		}
+		return false;
+	}
 }
 
 void USTUWeaponComponent::OnEmptyClip()

@@ -4,22 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "STUCoreTypes.h"
+#include "Weapon/STUBaseWeapon.h"
 #include "STUWeaponComponent.generated.h"
 
 
 class ASTUBaseWeapon;
-
-USTRUCT(BlueprintType)
-struct FWeaponData
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "Weapon")
-	TSubclassOf<ASTUBaseWeapon> WeaponClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "Weapon")
-	UAnimMontage* ReloadAnimMontage;
-};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MYPROJECT_API USTUWeaponComponent : public UActorComponent
@@ -34,6 +24,9 @@ public:
 	void StopFire();
 	void NextWeapon();
 	void Reload();
+
+	bool GetWeaponUIData(FWeaponUIData& UIData) const;
+	
 
 protected:
 	// Called when the game starts
@@ -83,19 +76,5 @@ private:
 	void OnEmptyClip();
 	void ChangeClip();
 	
-	template<typename T>
-	T*FindNotifyByClass(UAnimSequenceBase* Animation)
-	{
-		if(!Animation) return nullptr;
-		const auto NotifyEvents = Animation->Notifies;
-		for (auto NotifyEvent : NotifyEvents)
-		{
-			auto AnimNotify = Cast<T>(NotifyEvent.Notify);
-			if(AnimNotify)
-			{
-				return AnimNotify;
-			}
-		}
-		return nullptr;
-	}
+	
 };
