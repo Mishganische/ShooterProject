@@ -25,7 +25,9 @@ public:
 	void NextWeapon();
 	void Reload();
 
-	bool GetWeaponUIData(FWeaponUIData& UIData) const;
+	bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
+
+	bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
 	
 
 protected:
