@@ -7,7 +7,6 @@
 #include "STUCoreTypes.h"
 #include "STUPlayerHUDWidget.generated.h"
 
-class USTUWeaponComponent;
 
 UCLASS()
 class MYPROJECT_API USTUPlayerHUDWidget : public UUserWidget
@@ -24,6 +23,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
 
-private:
-	USTUWeaponComponent* GetWeaponComponent() const;
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	bool IsPlayerAlive() const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	bool IsPlayerSpectating() const;
+	
 };
