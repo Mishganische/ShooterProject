@@ -27,7 +27,16 @@ public:
 
 	FOnDeathSignature OnDeath;
 	FOnHealthChangedSignature OnHealthChanged;
+
+	bool TryToAddHealth(float HealthAmount);
+	bool IsHealthFull()const;
 	
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
+	float MaxHealth = 100.0f;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="AutoHealth")
 	bool IsAutoHealth = false;
@@ -40,14 +49,6 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="AutoHealth", meta=(EditCondition="IsAutoHealth"))
 	float HealModifier=1.0f;
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
-	float MaxHealth = 100.0f;
-
 	
 
 

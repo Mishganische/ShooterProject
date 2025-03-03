@@ -19,7 +19,6 @@ USTUHealthComponent::USTUHealthComponent()
 	
 }
 
-
 // Called when the game starts
 void USTUHealthComponent::BeginPlay()
 {
@@ -77,7 +76,7 @@ void USTUHealthComponent::HealUpdate()
 {
 		SetHealth(Health + HealModifier);
 
-	if (FMath::IsNearlyEqual(Health,MaxHealth) && GetWorld())
+	if (IsHealthFull() && GetWorld())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(HealTimerHandle);
 	}
@@ -91,6 +90,17 @@ void USTUHealthComponent::SetHealth(float NewHealth)
 }
 
 
+bool USTUHealthComponent::TryToAddHealth(float HealthAmount)
+{
+	if (IsDead() || IsHealthFull()) return false;
+	SetHealth(Health+HealthAmount);
+	return true;
+}
+
+bool USTUHealthComponent::IsHealthFull() const
+{
+	return FMath::IsNearlyEqual(Health,MaxHealth);
+}
 
 
 
