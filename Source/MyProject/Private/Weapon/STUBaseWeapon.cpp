@@ -4,13 +4,10 @@
 #include "Weapon/STUBaseWeapon.h"
 #include "Components/SkeletalMeshComponent.h" 
 #include "Engine/World.h"
-#include "Engine/DamageEvents.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Controller.h"
 
-
-DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon,All,All);
 
 // Sets default values
 ASTUBaseWeapon::ASTUBaseWeapon()
