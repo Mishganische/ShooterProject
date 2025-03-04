@@ -38,4 +38,3 @@ Saved/
 *.ipa
 *.xcodeproj
 *.xcworkspacegit add .
-             git commit -m "Первый коммит: чистый проект"
