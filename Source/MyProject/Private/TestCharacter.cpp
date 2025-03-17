@@ -6,7 +6,7 @@
 #include "Components/STUWeaponComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/InputComponent.h"
-//#include "Engine/EngineTypes.h"
+#include "Engine/EngineTypes.h"
 #include "Engine/DamageEvents.h"
 //#include "GameFramework/DamageType.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -51,15 +51,11 @@ void ATestCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	check(STUHealthComponent);
-	/*if (!STUHealthComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("STUHealthComponent is nullptr!"));
-		return;
-	}*/
 	check(TextRenderComponent);
 	check(GetCharacterMovement());
+	check(GetMesh());
 
-	OnHealthChanged(STUHealthComponent->GetHealth());
+	OnHealthChanged(STUHealthComponent->GetHealth(), 0.0f);
 	STUHealthComponent->OnDeath.AddUObject(this, &ATestCharacter::OnDeath);
 	STUHealthComponent->OnHealthChanged.AddUObject(this, &ATestCharacter::OnHealthChanged);
 
@@ -153,8 +149,8 @@ float ATestCharacter::GetActorDirection() const
 void ATestCharacter::OnDeath()
 {
 	UE_LOG(BaseCharacterLog, Display, TEXT("Player %s is dead!"), *GetName());
-	PlayAnimMontage(DeathAnimMontage);
 
+	//PlayAnimMontage(DeathAnimMontage);
 	GetCharacterMovement()->DisableMovement();
 	SetLifeSpan(10.0f);
 
@@ -162,9 +158,11 @@ void ATestCharacter::OnDeath()
 
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	WeaponComponent->StopFire();
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetMesh()->SetSimulatePhysics(true);
 }
 
-void ATestCharacter::OnHealthChanged(float Health)
+void ATestCharacter::OnHealthChanged(float Health, float HealthDelta)
 {
 	TextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }

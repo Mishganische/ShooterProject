@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "STUCoreTypes.h"
+#include "STUHealthComponentPro.h"
 #include "STUPlayerHUDWidget.generated.h"
 
 
@@ -28,5 +29,15 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	bool IsPlayerSpectating() const;
+	
+	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+	void OnTakeDamage();
+
+	virtual bool Initialize() override;
+
+private:
+	void OnHealthChanged(float Health, float HealthDelta);
+	
+	
 	
 };

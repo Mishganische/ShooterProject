@@ -7,6 +7,7 @@
 #include "STUCoreTypes.h"
 #include "STUHealthComponent.generated.h"
 
+class UCameraShakeBase;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MYPROJECT_API USTUHealthComponent : public UActorComponent
@@ -49,6 +50,9 @@ protected:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="AutoHealth", meta=(EditCondition="IsAutoHealth"))
 	float HealModifier=1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "VFX")
+	TSubclassOf<UCameraShakeBase> CameraShake;
 	
 
 
@@ -62,4 +66,6 @@ private:
 
 	void SetHealth(float NewHealth);
 	void HealUpdate();
+
+	void PlayCameraShake();
 };
