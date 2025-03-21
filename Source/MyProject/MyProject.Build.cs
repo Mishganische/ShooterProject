@@ -16,6 +16,8 @@ public class MyProject : ModuleRules
 				"Engine", 
 				"InputCore",
 				"Niagara",
+				"GameplayTasks",
+				"NavigationSystem",
 				"PhysicsCore"
 			});
 
