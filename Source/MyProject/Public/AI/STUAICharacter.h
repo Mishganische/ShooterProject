@@ -6,9 +6,10 @@
 #include "TestCharacter.h"
 #include "STUAICharacter.generated.h"
 
-/**
- * 
- */
+class UBehaviorTree;
+
+ 
+ 
 UCLASS()
 class MYPROJECT_API ASTUAICharacter : public ATestCharacter
 {
@@ -16,5 +17,8 @@ class MYPROJECT_API ASTUAICharacter : public ATestCharacter
 
 public:
 	ASTUAICharacter(const FObjectInitializer& ObjectInit);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
+	UBehaviorTree* BehaviorTreeAsset;
 	
 };
