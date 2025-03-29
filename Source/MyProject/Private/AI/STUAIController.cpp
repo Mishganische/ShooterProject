@@ -4,6 +4,7 @@
 #include "AI/STUAIController.h"
 #include "AI/STUAICharacter.h"
 #include "Components/STUAIPerceptionComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 ASTUAIController::ASTUAIController()
 {
@@ -26,6 +27,12 @@ void ASTUAIController::OnPossess(APawn* InPawn)
 void ASTUAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	const auto AimActor = STUAIPerceptionComponent->GetClosestEnemy();
+	const auto AimActor = GetFocusOnACtor();
 	SetFocus(AimActor);
+}
+
+AActor* ASTUAIController::GetFocusOnACtor() const
+{
+	if(!GetBlackboardComponent()) return nullptr;
+	return Cast<AActor>(GetBlackboardComponent()->GetValueAsObject(FocusOnKeyName));
 }
