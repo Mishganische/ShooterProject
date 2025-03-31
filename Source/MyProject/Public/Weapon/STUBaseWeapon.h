@@ -36,6 +36,7 @@ public:
 	FAmmoData GetAmmoData() const {return CurrentAmmo;}
 
 	bool TryToAddAmmo(int32 ClipsAmount);
+	bool IsAmmoEmpty() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -72,7 +73,6 @@ protected:
 
 
 	void DecreaseAmmo();
-	bool IsAmmoEmpty() const;
 	bool IsClipsEmpty() const;
 	bool IsAmmoFull() const;
 
