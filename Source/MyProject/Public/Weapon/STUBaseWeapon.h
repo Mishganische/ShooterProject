@@ -37,6 +37,7 @@ public:
 
 	bool TryToAddAmmo(int32 ClipsAmount);
 	bool IsAmmoEmpty() const;
+	bool IsAmmoFull() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -74,7 +75,7 @@ protected:
 
 	void DecreaseAmmo();
 	bool IsClipsEmpty() const;
-	bool IsAmmoFull() const;
+	
 
 	UNiagaraComponent* SpawnMuzzleFX();
 	
