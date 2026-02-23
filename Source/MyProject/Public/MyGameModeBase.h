@@ -42,4 +42,8 @@ private:
 	int32 RoundCountDown {0};
 	FTimerHandle TimerRoundHandle;
 	
+	
+	void ResetPlayers();
+	void ResetOnePlayer(AController* Controller);
+	
 };
