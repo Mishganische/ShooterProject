@@ -6,6 +6,7 @@
 #include "TestCharacter.h"
 #include "AI/STUAIController.h"
 #include "UI/STUHUD.h"
+#include "Player/STUPlayerState.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogMyGameModeBase, All, All);
 
@@ -14,6 +15,7 @@ AMyGameModeBase::AMyGameModeBase()
 	DefaultPawnClass = ATestCharacter::StaticClass();
 	PlayerControllerClass = AMyPlayerController::StaticClass();
 	HUDClass = ASTUHUD::StaticClass();
+	PlayerStateClass = ASTUPlayerState::StaticClass();
 }
 
 void AMyGameModeBase::StartPlay()
@@ -21,6 +23,7 @@ void AMyGameModeBase::StartPlay()
 	Super::StartPlay();
 	
 	SpawnBots();
+	CreateTeamsInfo();
 	
 	CurrentRound = 1;
 	StartRound();
@@ -88,9 +91,56 @@ void AMyGameModeBase::ResetPlayers()
 
 void AMyGameModeBase::ResetOnePlayer(AController* Controller)
 {
-	if (Controller || Controller->GetPawn())
+	if (Controller && Controller->GetPawn())
 	{
 		Controller->GetPawn()->Reset();
-		RestartPlayer(Controller);
 	}
+	RestartPlayer(Controller);
+	SetPlayerColor(Controller);
+}
+
+void AMyGameModeBase::CreateTeamsInfo()
+{
+	if (!GetWorld()) return;
+	
+	int32 TeamID = 1;
+	for (auto It = GetWorld()->GetControllerIterator(); It; ++It)
+	{
+		const auto Controller = It->Get();
+		if (!Controller) return;
+		
+		const auto PlayerState = Cast<ASTUPlayerState>(Controller->PlayerState);
+		if (!PlayerState) return;
+		
+		PlayerState->SetTeamID(TeamID);
+		PlayerState->SetTeamColor(DetermineColorByTeamID(TeamID));
+		SetPlayerColor(Controller);
+		
+		TeamID = TeamID == 1 ? 2 : 1;
+	}
+	
+}
+
+FLinearColor AMyGameModeBase::DetermineColorByTeamID(int32 TeamID) const
+{
+	if (TeamID-1 < GameData.TeamColors.Num())
+	{
+		return GameData.TeamColors[TeamID-1];
+	}
+	
+	return GameData.DefaultTeamColor;
+}
+
+void AMyGameModeBase::SetPlayerColor(AController* Controller)
+{
+	if (!Controller) return;
+	
+	const auto Character = Cast<ATestCharacter>(Controller->GetPawn());
+	if (!Character) return;
+	
+	const auto PlayerState = Cast<ASTUPlayerState>(Controller->PlayerState);
+	if (!PlayerState) return;
+	
+	Character->SetPlayerColor(PlayerState->GetTeamColor());
+	
 }

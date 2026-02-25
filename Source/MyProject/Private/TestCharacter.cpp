@@ -8,14 +8,12 @@
 #include "Components/InputComponent.h"
 #include "Engine/EngineTypes.h"
 #include "Engine/DamageEvents.h"
-//#include "GameFramework/DamageType.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "STUCharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "Components/CapsuleComponent.h"
 #include "STUHealthComponent.h"
-//#include "STUHealthComponentPro.h"
 
 DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog,All,All);
 
@@ -144,6 +142,14 @@ float ATestCharacter::GetActorDirection() const
 	const auto CrossProduct = FVector::CrossProduct(VelocityNormal,GetActorForwardVector());
 	const auto Degrees = FMath::RadiansToDegrees(AngleBetween);
 	return CrossProduct.IsZero() ? Degrees : Degrees* FMath::Sign(CrossProduct.Z);
+}
+
+void ATestCharacter::SetPlayerColor(const FLinearColor Color)
+{
+	const auto MaterialInst = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
+	if (!MaterialInst) return;
+	
+	MaterialInst->SetVectorParameterValue(MaterialColorName, Color);
 }
 
 
