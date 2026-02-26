@@ -68,4 +68,6 @@ private:
 	void HealUpdate();
 
 	void PlayCameraShake();
+	
+	void Killed(AController* KillerController);
 };

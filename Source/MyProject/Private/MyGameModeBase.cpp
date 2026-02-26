@@ -39,6 +39,23 @@ UClass* AMyGameModeBase::GetDefaultPawnClassForController_Implementation(AContro
 	return Super::GetDefaultPawnClassForController_Implementation(InController);
 }
 
+void AMyGameModeBase::Killed(AController* KillerController, AController* VictimController)
+{
+
+	const auto KillerPlayerState = KillerController ? Cast<ASTUPlayerState>(KillerController->PlayerState) : nullptr;
+	const auto VictimPlayerState = VictimController ? Cast<ASTUPlayerState>(VictimController->PlayerState) : nullptr;
+	
+	if ( KillerPlayerState)
+	{
+		KillerPlayerState->AddKill();
+	}
+	
+	if (VictimPlayerState)
+	{
+		VictimPlayerState->AddDeath();
+	}
+}
+
 
 void AMyGameModeBase::SpawnBots()
 {
@@ -75,6 +92,7 @@ void AMyGameModeBase::GameTimerUpdate()
 		else
 		{
 			UE_LOG(LogMyGameModeBase, Warning, TEXT("GAME OVER"));
+			LogPlayerInfo();
 		}
 	}
 }
@@ -143,4 +161,19 @@ void AMyGameModeBase::SetPlayerColor(AController* Controller)
 	
 	Character->SetPlayerColor(PlayerState->GetTeamColor());
 	
+}
+
+void AMyGameModeBase::LogPlayerInfo()
+{
+	if (!GetWorld()) return;
+	for (auto It = GetWorld()->GetControllerIterator(); It; ++It)
+	{
+		const auto Controller = It->Get();
+		if (!Controller) return;
+		
+		const auto PlayerState = Cast<ASTUPlayerState>(Controller->PlayerState);
+		if (!PlayerState) return;
+		
+		PlayerState->LogInfo();
+	}
 }
