@@ -3,12 +3,16 @@
 
 #include "MyGameModeBase.h"
 #include "MyPlayerController.h"
+#include "STUUtils.h"
 #include "TestCharacter.h"
 #include "AI/STUAIController.h"
+#include "Components/STURespawnComponent.h"
 #include "UI/STUHUD.h"
 #include "Player/STUPlayerState.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogMyGameModeBase, All, All);
+
+constexpr static int32 MinRoundTimeForRespawn = 10;
 
 AMyGameModeBase::AMyGameModeBase()
 {
@@ -54,6 +58,13 @@ void AMyGameModeBase::Killed(AController* KillerController, AController* VictimC
 	{
 		VictimPlayerState->AddDeath();
 	}
+	
+	StartRespawn(VictimController);
+}
+
+void AMyGameModeBase::RequestRespawn(AController* Controller)
+{
+	ResetOnePlayer(Controller);
 }
 
 
@@ -176,4 +187,14 @@ void AMyGameModeBase::LogPlayerInfo()
 		
 		PlayerState->LogInfo();
 	}
+}
+
+void AMyGameModeBase::StartRespawn(AController* Controller)
+{
+	const auto RespawnAvailable = RoundCountDown > MinRoundTimeForRespawn + GameData.RespawnTime;
+	if (!RespawnAvailable) return;
+	const auto RespawnComponent = STUUtils::GetSTUPlayerComponent<USTURespawnComponent>(Controller);
+	if (!RespawnComponent) return;
+	
+	RespawnComponent->Respawn(GameData.RespawnTime);
 }

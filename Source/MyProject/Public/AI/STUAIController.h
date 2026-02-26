@@ -7,6 +7,7 @@
 #include "STUAIController.generated.h"
 
 class USTUAIPerceptionComponent;
+class USTURespawnComponent;
 
 
 UCLASS()
@@ -21,6 +22,9 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Components")
 	USTUAIPerceptionComponent* STUAIPerceptionComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Components")
+	USTURespawnComponent* RespawnComponent;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "AI")
