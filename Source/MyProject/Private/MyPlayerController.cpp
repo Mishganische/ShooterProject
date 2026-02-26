@@ -8,3 +8,10 @@ AMyPlayerController::AMyPlayerController()
 {
 	RespawnComponent = CreateDefaultSubobject<USTURespawnComponent>("STURespawnComponent");
 }
+
+void AMyPlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+	
+	OnNewPawn.Broadcast(InPawn);
+}
