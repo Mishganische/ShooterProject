@@ -28,6 +28,9 @@ public:
 	int32 GetCurrentRound() const {return CurrentRound;}
 	int32 GetRoundSecondsRemaining() const {return RoundCountDown;}
 	void RequestRespawn(AController* Controller);
+	
+	virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate = FCanUnpause()) override;
+	virtual bool ClearPause() override;
 protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
@@ -67,5 +70,8 @@ private:
 	
 	
 	void SetMatchState(ESTUMatchState State);
+	
+	
+	
 	
 };

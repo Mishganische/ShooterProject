@@ -70,6 +70,27 @@ void AMyGameModeBase::RequestRespawn(AController* Controller)
 	ResetOnePlayer(Controller);
 }
 
+bool AMyGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate)
+{
+	const auto PauseSet = Super::SetPause(PC, CanUnpauseDelegate);
+	if (PauseSet)
+	{
+		SetMatchState(ESTUMatchState::Pause);
+	}
+	
+	return PauseSet;
+}
+
+bool AMyGameModeBase::ClearPause()
+{
+	const auto PauseCleared = Super::ClearPause();
+	if (PauseCleared)
+	{
+		SetMatchState(ESTUMatchState::InProgress);
+	}
+	return PauseCleared;
+}
+
 
 void AMyGameModeBase::SpawnBots()
 {
