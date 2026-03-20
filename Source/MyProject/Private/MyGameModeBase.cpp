@@ -32,6 +32,8 @@ void AMyGameModeBase::StartPlay()
 	
 	CurrentRound = 1;
 	StartRound();
+	
+	SetMatchState(ESTUMatchState::InProgress);
 }
 
 UClass* AMyGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
@@ -212,4 +214,13 @@ void AMyGameModeBase::GameOver()
 			Pawn->DisableInput(nullptr);
 		}
 	}
+	SetMatchState(ESTUMatchState::GameOver);
+}
+
+void AMyGameModeBase::SetMatchState(ESTUMatchState State)
+{
+	if (MatchState == State) return;
+	
+	MatchState = State;
+	OnMatchStateChanged.Broadcast(MatchState);
 }

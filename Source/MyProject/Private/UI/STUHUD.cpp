@@ -3,6 +3,9 @@
 
 #include "UI/STUHUD.h"
 #include "Engine/Canvas.h"
+#include "UI/STUHUD.h"
+
+#include "MyGameModeBase.h"
 #include "Blueprint/UserWidget.h"
 
 void ASTUHUD::DrawHUD()
@@ -20,6 +23,15 @@ void ASTUHUD::BeginPlay()
 	{
 		PlayerHUDWidget->AddToViewport();
 	}
+	
+	if (GetWorld())
+	{
+		const auto GameMode = Cast<AMyGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			GameMode->OnMatchStateChanged.AddUObject(this, &ASTUHUD::OnMatchStateChanged);
+		}
+	}
 }
 
 
@@ -36,4 +48,10 @@ void ASTUHUD::DrawCrosshair()
 
 	DrawLine(Center.Min-HalfLineSize, Center.Max, Center.Min+HalfLineSize, Center.Max, LinearColor, Thickness);
 	DrawLine(Center.Min,Center.Max-HalfLineSize, Center.Min, Center.Max+HalfLineSize, LinearColor, Thickness);                       
+}
+
+void ASTUHUD::OnMatchStateChanged(ESTUMatchState State)
+{
+	
+	
 }

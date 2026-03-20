@@ -17,6 +17,8 @@ class MYPROJECT_API AMyGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 public:
 	AMyGameModeBase();
+	
+	FOnMatchStateChangedSignature OnMatchStateChanged;
 	virtual void StartPlay();
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 	
@@ -38,6 +40,8 @@ protected:
 	FGameData GameData;
 	
 private:
+	
+	ESTUMatchState MatchState = ESTUMatchState::WaitingToStart;
 	void SpawnBots();
 	void StartRound();
 	void GameTimerUpdate();
@@ -60,5 +64,8 @@ private:
 	void StartRespawn(AController* Controller);
 	
 	void GameOver();
+	
+	
+	void SetMatchState(ESTUMatchState State);
 	
 };
