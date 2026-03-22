@@ -18,6 +18,9 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UButton* StartGameButton;
 	
+	UPROPERTY(meta = (BindWidget))
+	UButton* QuitGameButton;
+	
 	
 	virtual void NativeOnInitialized() override;
 	
@@ -25,4 +28,8 @@ protected:
 private:
 	UFUNCTION()
 	void OnStartGame();
+	
+	UFUNCTION()
+	void OnQuitGame();
+	
 };

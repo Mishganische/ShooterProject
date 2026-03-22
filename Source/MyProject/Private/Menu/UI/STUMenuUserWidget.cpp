@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/Button.h"
 #include "STUGameInstance.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void USTUMenuUserWidget::NativeOnInitialized()
 {
@@ -13,6 +14,11 @@ void USTUMenuUserWidget::NativeOnInitialized()
 	if (StartGameButton)
 	{
 		StartGameButton->OnClicked.AddDynamic(this, &USTUMenuUserWidget::OnStartGame);
+	}
+	
+	if (QuitGameButton)
+	{
+		QuitGameButton->OnClicked.AddDynamic(this, &USTUMenuUserWidget::OnQuitGame);
 	}
 }
 
@@ -27,4 +33,9 @@ void USTUMenuUserWidget::OnStartGame()
 	if (STUGameInstance->GetStartupLevelName().IsNone()) return;
 
 	UGameplayStatics::OpenLevel(this, STUGameInstance->GetStartupLevelName());
+}
+
+void USTUMenuUserWidget::OnQuitGame()
+{
+	UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, true);
 }
