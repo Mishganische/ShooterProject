@@ -4,6 +4,7 @@
 #include "Menu/UI/STUMenuUserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/Button.h"
+#include "STUGameInstance.h"
 
 void USTUMenuUserWidget::NativeOnInitialized()
 {
@@ -17,6 +18,13 @@ void USTUMenuUserWidget::NativeOnInitialized()
 
 void USTUMenuUserWidget::OnStartGame()
 {
-	const FName StartupLevelName("TestMap2");
-	UGameplayStatics::OpenLevel(this, StartupLevelName);
+	
+	if (!GetWorld()) return;
+	
+	const auto STUGameInstance = GetWorld()->GetGameInstance<USTUGameInstance>();
+	if (!STUGameInstance) return;
+	
+	if (STUGameInstance->GetStartupLevelName().IsNone()) return;
+
+	UGameplayStatics::OpenLevel(this, STUGameInstance->GetStartupLevelName());
 }
