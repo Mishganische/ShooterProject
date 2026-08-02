@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "STUCoreTypes.h"
+#include "UI/STUBaseWidget.h"
 #include "STUGameOverWidget.generated.h"
 
 class UVerticalBox;
@@ -12,7 +13,7 @@ class UButton;
 
 
 UCLASS()
-class MYPROJECT_API USTUGameOverWidget : public UUserWidget
+class MYPROJECT_API USTUGameOverWidget : public USTUBaseWidget
 {
 	GENERATED_BODY()
 

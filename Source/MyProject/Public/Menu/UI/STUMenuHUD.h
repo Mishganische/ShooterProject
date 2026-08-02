@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include "UI/STUBaseWidget.h"
 #include "STUMenuHUD.generated.h"
 
 /**

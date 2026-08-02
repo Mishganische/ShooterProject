@@ -8,6 +8,7 @@
 #include "Components/HorizontalBox.h"
 #include "Menu/UI/STULevelItemWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Sound/SoundCue.h"
 
 void USTUMenuUserWidget::NativeOnInitialized()
 {
@@ -26,14 +27,21 @@ void USTUMenuUserWidget::NativeOnInitialized()
 	InitLevelItems();
 }
 
-void USTUMenuUserWidget::OnStartGame()
+void USTUMenuUserWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* Animation)
 {
 	
+	if (Animation !=HideAnimation) return;
 	const auto STUGameInstance = GetSTUGameInstance();
 	if (!STUGameInstance) return;
 
 
 	UGameplayStatics::OpenLevel(this, STUGameInstance->GetStartupLevel().LevelName);
+}
+
+void USTUMenuUserWidget::OnStartGame()
+{
+	PlayAnimation(HideAnimation);
+	UGameplayStatics::PlaySound2D(GetWorld(), StartGameSound);
 }
 
 void USTUMenuUserWidget::OnQuitGame()
