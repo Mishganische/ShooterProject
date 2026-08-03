@@ -11,6 +11,7 @@
 class USkeletalMeshComponent;
 class UNiagaraSystem;
 class UNiagaraComponent;
+class USoundCue;
 
 
 UCLASS()
@@ -62,7 +63,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "VFX")
 	UNiagaraSystem* MuzzleFX;
 
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Sound")
+	USoundCue*  FireSound;
 
 	virtual void MakeShot();
 
