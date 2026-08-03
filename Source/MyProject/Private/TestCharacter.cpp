@@ -3,10 +3,13 @@
 #include "TestCharacter.h"
 #include "STUCharacterMovementComponent.h"
 #include "STUHealthComponent.h"
+#include "UI/STUBaseWidget.h"
+#include "Sound/SoundCue.h"
 #include "Components/STUWeaponComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/Controller.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
 
@@ -70,6 +73,8 @@ void ATestCharacter::OnDeath()
 
     GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     GetMesh()->SetSimulatePhysics(true);
+    
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), DeathSound, GetActorLocation());
 }
 
 void ATestCharacter::OnGroundLanded(const FHitResult& Hit)
