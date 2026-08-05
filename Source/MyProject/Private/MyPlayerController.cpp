@@ -4,6 +4,7 @@
 #include "MyPlayerController.h"
 #include "Components/STURespawnComponent.h"
 #include "MyGameModeBase.h"
+#include "STUGameInstance.h"
 
 AMyPlayerController::AMyPlayerController()
 {
@@ -37,6 +38,15 @@ void AMyPlayerController::OnMatchStateChanged(ESTUMatchState State)
 	}
 }
 
+void AMyPlayerController::OnMuteSound()
+{
+	if (!GetWorld()) return;
+	const auto STUGameInstance = GetWorld()->GetGameInstance<USTUGameInstance>();
+	if (!STUGameInstance) return;
+	
+	STUGameInstance->ToggleVolume();
+}
+
 void AMyPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -50,6 +60,7 @@ void AMyPlayerController::SetupInputComponent()
 	if (!InputComponent) return;
 	
 	InputComponent->BindAction("GamePause", IE_Pressed, this, &AMyPlayerController::OnPauseGame);
+	InputComponent->BindAction("Mute", IE_Pressed, this, &AMyPlayerController::OnMuteSound);
 }
 
 void AMyPlayerController::OnPauseGame()

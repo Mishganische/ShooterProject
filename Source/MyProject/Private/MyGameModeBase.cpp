@@ -11,7 +11,6 @@
 #include "Player/STUPlayerState.h"
 #include "EngineUtils.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogMyGameModeBase, All, All);
 
 constexpr static int32 MinRoundTimeForRespawn = 10;
 
@@ -114,7 +113,7 @@ void AMyGameModeBase::StartRound()
 
 void AMyGameModeBase::GameTimerUpdate()
 {
-	UE_LOG(LogMyGameModeBase, Log, TEXT("Time: %i / Round: %i/%i"), RoundCountDown, CurrentRound, GameData.RoundsNum);
+	
 	if (--RoundCountDown == 0)
 	{
 		GetWorldTimerManager().ClearTimer(TimerRoundHandle);
@@ -225,7 +224,6 @@ void AMyGameModeBase::StartRespawn(AController* Controller)
 
 void AMyGameModeBase::GameOver()
 {
-	UE_LOG(LogMyGameModeBase, Warning, TEXT("GAME OVER"));
 	LogPlayerInfo();
 	
 	for (auto Pawn : TActorRange<APawn>(GetWorld()))
